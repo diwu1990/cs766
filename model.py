@@ -107,7 +107,7 @@ class Net(nn.Module):
 			# image 24x24
 			nn.ConvTransposed2d(
 				in_channels=128, out_channels=128, kernel_size=3, stride=1
-			)
+			),
 			nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters	
 		)

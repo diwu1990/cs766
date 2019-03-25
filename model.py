@@ -101,7 +101,7 @@ class Net(nn.Module):
 			# image 12x12
 			nn.ConvTransposed2d(
 				in_channels=256, out_channels=128, kernel_size=3, stride=2
-			)
+			),
 			nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
 			# image 24x24
@@ -116,7 +116,7 @@ class Net(nn.Module):
 			# image 12x12
 			nn.ConvTransposed2d(
 				in_channels=256, out_channels=128, kernel_size=1, stride=2
-			)
+			),
 			nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
 			# image 24x24
@@ -126,13 +126,13 @@ class Net(nn.Module):
 			# image 24x24
 			nn.ConvTransposed2d(
 				in_channels=128, out_channels=64, kernel_size=3, stride=2
-			)
+			),
 			nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
 			# image 48x48
 			nn.ConvTransposed2d(
 				in_channels=64, out_channels=64, kernel_size=3, stride=1
-			)
+			),
 			nn.BatchNorm2d(64),
             nn.LeakyReLU(0.1), # parameters	
 		)
@@ -141,7 +141,7 @@ class Net(nn.Module):
 			# image 24x24
 			nn.ConvTransposed2d(
 				in_channels=128, out_channels=64, kernel_size=1, stride=2
-			)
+			),
 			nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
 			# image 48x48
@@ -151,7 +151,7 @@ class Net(nn.Module):
 			# image 48x48
 			nn.ConvTransposed2d(
 				in_channels=64, out_channels=32, kernel_size=3, stride=2
-			)
+			),
 			nn.BatchNorm2d(32),
             nn.LeakyReLU(0.1), # parameters
 			# image 96x96

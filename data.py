@@ -184,6 +184,12 @@ def generate_csv():
             shg = os.path.join(shgPath, str(i+1) + '.jpeg')
             filewriter.writerow([he, shg])
 
+def unnormalize_img(batch, mean, std):
+    for img in batch:
+        for t, m, s in zip(img, mean, std):
+            t.mul_(s).add_(m)
+    return batch 
+
 def show_patch(dataloader, index = 3):
     for i_batch, sample_batched in enumerate(dataloader):
         print(i_batch, sample_batched['input'].size(), 
@@ -197,7 +203,8 @@ def show_patch(dataloader, index = 3):
             im_size = input_batch.size(2)
             label_batch=label_batch.reshape([batch_size,1,im_size,im_size])
             print(label_batch.size())
-
+            input_batch = unnormalize_img(input_batch, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+            label_batch = unnormalize_img(label_batch, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
 
             grid = utils.make_grid(input_batch)
             plt.imshow(grid.numpy().transpose((1, 2, 0)))

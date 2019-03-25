@@ -5,19 +5,37 @@ import torch.nn.init as init
 class Net(nn,Module):
 	def __init__(self):
 		super(Net, self).__init__()
+        
+        self.block1 = nn.Sequential(
+            nn.Conv2d(
+                in_channels=1, out_channels=64, kernel_size=7, stride=2
+            )
+            nn.BatchNorm2d(64)
+            nn.LeakyReLU(0.1) # parameters
+            nn.Conv2d(
+                in_channels=64, out_channels=64, kernel_size=3, stride=1
+            )
+            nn.BatchNorm2d(64)
+            nn.LeakyReLU(0.1) # parameters
+            nn.Conv2d(
+                in_channels=64, out_channels=64, kernel_size=3, stride=1
+            )
+            nn.BatchNorm2d(64)
+            nn.LeakyReLU(0.1) # parameters
+        )
 		
-		self.conv1 = nn.Conv2d(in_channels=1, out_channels=64, kernel_size=7, stride=2)
-		self.bn1 = nn.BatchNorm2d(64)
-		self.relu1 = nn.LeakyReLU(0.1)
-		self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1)
-		self.bn2 = nn.BatchNorm2d(64)
-		self.relu2 = nn.LeakyReLU(0.1)
-		self.conv3 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1)
-		self.bn3 = nn.BatchNorm2d(64)
-		self.relu3 = nn.LeakyReLU(0.1)
-		
+        
 	def forward(self, x):
-		residual = x
-		out = self. 
-		
+        
+		residual1 = x # save input as residual
+		out = self.block1 # run block1
+        out = out + residual # add residuak to output
+        
+        residual2 = out # save block1 output as new residual
+        out = sefl.block2
+        out = out + residual2
+        
+		return out
+    
+    
 	def _initialize_weights(self):

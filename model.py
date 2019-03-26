@@ -162,13 +162,14 @@ class Net(nn.Module):
         )
         
         self.block8 = nn.Sequential(
-            # image 96x96
-            nn.ConvTranspose2d(
-                in_channels=32, out_channels=1, kernel_size=1, stride=1
-            ),
-            nn.BatchNorm2d(1),
-            nn.LeakyReLU(0.1), # parameters
-            # image 96x96
+#             # image 96x96
+#             nn.ConvTranspose2d(
+#                 in_channels=32, out_channels=1, kernel_size=1, stride=1
+#             ),
+#             nn.BatchNorm2d(1),
+#             nn.LeakyReLU(0.1), # parameters
+#             # image 96x96
+            nn.Linear(32*96*96, 96*96)
         )
         
         self.fc = nn.Sequential(
@@ -208,8 +209,11 @@ class Net(nn.Module):
         out = self.block6(out)
         out = out + residual6
         
-        out = self.block7(out) # image 96x96 
-        out = self.block8(out) # image 96x96 
+        out = self.block7(out) # image 96x96, 4D tensor [batch, channel, h, w]
+        batchsize = out.size()[0]
+#         print(batchsize)
+        out = out.view(batchsize, -1)
+        out = self.block8(out) # image 96x96, 2D tensor [batch, features]
 
         out = self.fc(out)
         
@@ -218,6 +222,8 @@ class Net(nn.Module):
 #         out = F.relu(out) # fully connect sigmoid, image 96x96      
         
 #         print(out.size())
+        out = out.view(-1, 1, 96, 96)
+        print(out.size())
         return out
     
     

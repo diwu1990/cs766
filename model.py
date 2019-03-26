@@ -223,7 +223,6 @@ class Net(nn.Module):
         
 #         print(out.size())
         out = out.view(-1, 1, 96, 96)
-        print(out.size())
         return out
     
     

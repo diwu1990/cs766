@@ -82,21 +82,40 @@ class Rescale(object):
 
         new_h, new_w = int(new_h), int(new_w)
         
-        input_img_cp = copy.deepcopy(input_img)
-        output_cp = copy.deepcopy(output)
+#         input_img_cp = copy.deepcopy(input_img)
+#         output_cp = copy.deepcopy(output)
+        
+#         transforms.resize(input_img_cp, [32, 3, new_h, new_w])
+#         he_img = input_img_cp
+# #         for i in input_img_cp:
+# #             transforms.Resize(i, (3, new_h, new_w))
+            
+# #         he_img = torch.from_numpy(input_img_cp.numpy())
+        
+# #         print(he_img.size())
+        
+#         transforms.resize(output_cp, [32, new_h, new_w])
+#         shg_img = output_cp
+# #         shg_img = torch.from_numpy(output_cp.numpy())
+# #         print(shg_img.size())
+#         print(input_img.size())
+        input_img = transforms.functional.resize(transforms.ToPILImage()(input_img.float()), (96, 96))
+#         print(input_img.shape)
+            
+#         he_img = transforms.functional.resize(transforms.ToPILImage()(input_img.float()), 96)
+        he_img = torch.from_numpy(img_as_float(input_img))
+        he_img = torch.transpose(he_img, 0, 2)
+#         print(he_img.size())
         
         
-        he_img = torch.from_numpy(transform.resize(input_img_cp.numpy(), (new_h, new_w)))
-        print(he_img.size())
-
-        shg_img = torch.from_numpy(transform.resize(output_cp.numpy(), (new_h, new_w)))
-        print(he_img.size())
+#         for i in output:
+        output = transforms.functional.resize(transforms.ToPILImage()(output.float()), (96, 96))
+#         print(output.shape)
         
-#         he_img = transforms.functional.resize(transforms.ToPILImage()(input_img.float()), (new_h, new_w))
-#         he_img = torch.from_numpy(img_as_float(he_img))
-#         shg_img = transforms.functional.resize(transforms.ToPILImage()(output.float()), (new_h, new_w))
-#         shg_img = torch.from_numpy(img_as_float(shg_img))
-
+#         shg_img = transforms.functional.resize(transforms.ToPILImage()(output.float()), 96)
+        shg_img = torch.from_numpy(img_as_float(output))
+        shg_img = torch.transpose(shg_img, 0, 1)
+#         print(shg_img.size())
 
   
 

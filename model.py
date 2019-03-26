@@ -151,11 +151,19 @@ class Net(nn.Module):
         self.block7 = nn.Sequential(
             # image 48x48
             nn.ConvTranspose2d(
-                in_channels=64, out_channels=32, kernel_size=3, stride=2, padding=1
+                in_channels=64, out_channels=32, kernel_size=3, stride=2, padding=2
             ),
             nn.BatchNorm2d(32),
             nn.LeakyReLU(0.1), # parameters
             # image 96x96
+        )
+        
+        self.fc = nn.Sequential(
+        torch.nn.Linear(
+                in_features=32*96*96,
+                out_features=96*96
+            ),
+            nn.Sigmoid()
         )
             
         
@@ -192,8 +200,12 @@ class Net(nn.Module):
         
         out = self.block7(out) # image 96x96 
         
-        out = F.relu(out) # fully connect sigmoid, image 96x96      
+        out = self.fc(out)
         
+        
+#         out = F.relu(out) # fully connect sigmoid, image 96x96      
+        
+        print(out.size())
         return out
     
     

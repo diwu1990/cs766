@@ -11,6 +11,7 @@ from IPython import display
 # Ignore warnings
 import warnings
 import csv
+import copy
 warnings.filterwarnings("ignore")
 
 plt.ion()   # interactive mode
@@ -68,9 +69,9 @@ class Rescale(object):
         self.output_size = output_size
 
     def __call__(self, sample):
-        input, output = sample['input'], sample['output']
+        input_img, output = sample['input'], sample['output']
 
-        h, w = input.shape[:2]
+        h, w = input_img.shape[:2]
         if isinstance(self.output_size, int):
             if h > w:
                 new_h, new_w = self.output_size * h / w, self.output_size
@@ -80,9 +81,21 @@ class Rescale(object):
             new_h, new_w = self.output_size
 
         new_h, new_w = int(new_h), int(new_w)
+        
+        input_img_cp = copy.deepcopy(input_img)
+        output_cp = copy.deepcopy(output)
+        
+        
+        he_img = torch.from_numpy(transform.resize(input_img_cp.numpy(), (new_h, new_w)))
+        print(he_img.size())
 
-        he_img = transform.resize(input, (new_h, new_w))
-        shg_img = transform.resize(output, (new_h, new_w))
+        shg_img = torch.from_numpy(transform.resize(output_cp.numpy(), (new_h, new_w)))
+        print(he_img.size())
+        
+#         he_img = transforms.functional.resize(transforms.ToPILImage()(input_img.float()), (new_h, new_w))
+#         he_img = torch.from_numpy(img_as_float(he_img))
+#         shg_img = transforms.functional.resize(transforms.ToPILImage()(output.float()), (new_h, new_w))
+#         shg_img = torch.from_numpy(img_as_float(shg_img))
 
 
   

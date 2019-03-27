@@ -162,15 +162,21 @@ class Net(nn.Module):
         )
         
         self.block8 = nn.Sequential(
-#             # image 96x96
-#             nn.ConvTranspose2d(
-#                 in_channels=32, out_channels=1, kernel_size=1, stride=1
-#             ),
-#             nn.BatchNorm2d(1),
-#             nn.LeakyReLU(0.1), # parameters
-#             # image 96x96
-            nn.Linear(32*96*96, 96*96)
+            # image 96x96
+            nn.Conv2d(
+                in_channels=32, out_channels=4, kernel_size=3, stride=2, padding=1
+            ),
+            nn.BatchNorm2d(4),
+            nn.LeakyReLU(0.1), # parameters
+            # image 48x48
         )
+        
+        self.block9 = nn.Sequential(
+            # image 48x48
+            nn.PixelShuffle(2)
+            # image 96x96           
+        )
+        
         
         self.fc = nn.Sequential(
 #             nn.PixelShuffle(96/89)
@@ -209,11 +215,13 @@ class Net(nn.Module):
         out = self.block6(out)
         out = out + residual6
         
-        out = self.block7(out) # image 96x96, 4D tensor [batch, channel, h, w]
-        batchsize = out.size()[0]
+        out = self.block7(out)
+        
+        out = self.block8(out) # image 96x96, 4D tensor [batch, channel, h, w]
+#        batchsize = out.size()[0]
 #         print(batchsize)
-        out = out.view(batchsize, -1)
-        out = self.block8(out) # image 96x96, 2D tensor [batch, features]
+#        out = out.view(batchsize, -1)
+        out = self.block9(out) # image 96x96, 2D tensor [batch, features]
 
         out = self.fc(out)
         

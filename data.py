@@ -2,7 +2,7 @@ from __future__ import print_function, division
 import os
 import torch
 import pandas as pd
-from skimage import io, transform, img_as_float
+from skimage import io, transform, img_as_float, color
 import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
@@ -137,21 +137,30 @@ class ToTensor(object):
 class Normalize(object):
     
 
-    def __init__(self, mean, std):
-        self.mean = mean
-        self.std = std
+#     def __init__(self, mean, std):
+#          self.mean = mean
+#          self.std = std
 
     def __call__(self, sample):
         
+        #nparray
         input, output = sample['input'], sample['output']
         
-        gray_mean=np.mean(self.mean)
-        gray_std=np.mean(self.std)
-        output.sub_(gray_mean).div_(gray_std)
+        gray = color.rgb2gray(input)
+        
+        gray_mean=np.mean(gray)
+        gray_std=np.std(gray)
+        
+        SHG_mean = np.mean(output)
+        SHG_std = np.std(output)
+        output = (output-SHG_mean)/SHG_std
+        output = (output+gray_mean) * gray_std
+        
 
         
-        for t, m, s in zip(input, self.mean, self.std):
-            t.sub_(m).div_(s)
+        # HE
+#         for t, m, s in zip(input, self.mean, self.std):
+#             t.sub_(m).div_(s)
         
         
         return sample
@@ -204,8 +213,8 @@ def show_patch(dataloader, index = 3):
             im_size = input_batch.size(2)
             label_batch=label_batch.reshape([batch_size,1,im_size,im_size])
             print(label_batch.size())
-            input_batch = unnormalize_img(input_batch, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
-            label_batch = unnormalize_img(label_batch, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+#             input_batch = unnormalize_img(input_batch, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+#             label_batch = unnormalize_img(label_batch, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
 
             grid = utils.make_grid(input_batch)
             plt.imshow(grid.numpy().transpose((1, 2, 0)))

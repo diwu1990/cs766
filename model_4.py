@@ -10,47 +10,59 @@ class Net(nn.Module):
         self.block0 = nn.Sequential(
             # input image 96x96
             nn.Conv2d(
-                in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3
+                in_channels=3, out_channels=128, kernel_size=5, stride=1, padding=2
             ),
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
-            # image 48x48
+            # image 96x96
         )
         
-        self.block1 = nn.Sequential(           
+        self.block1 = nn.Sequential(
+            # image 96x96
             nn.Conv2d(
-                in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1
+                in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1
             ),
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
             nn.Conv2d(
-                in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1
+                in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1
             ),
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
-            # image 48x48
+            # image 96x96
         )
         
         self.info1 = nn.Sequential(
-            # 48x48
+            # 96x96
             nn.Conv2d(
-                in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1
+                in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1
             ),
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
+            # 96x96
         )
         
         self.block2 = nn.Sequential(
-            # image 48x48
+            # image 96x96
             nn.Conv2d(
-                in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1
+                in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1
             ),
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
             nn.Conv2d(
-                in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1
+                in_channels=128, out_channels=256, kernel_size=4, stride=2, padding=1
             ),
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(0.1), # parameters
+            # image 48x48
+        )
+         
+        self.side2 = nn.Sequential(
+            # image 96x96
+            nn.Conv2d(
+                in_channels=128, out_channels=256, kernel_size=2, stride=2
+            ),
+            nn.BatchNorm2d(256),
             nn.LeakyReLU(0.1), # parameters
             # image 48x48
         )
@@ -58,46 +70,21 @@ class Net(nn.Module):
         self.block3 = nn.Sequential(
             # image 48x48
             nn.Conv2d(
-                in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=1
-            ),
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.1), # parameters
-            # image 24x24
-            nn.Conv2d(
-                in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1
-            ),
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.1), # parameters
-            # image 24x24
-        )
-        
-        self.info2 = nn.Sequential(
-            # 24x24
-            nn.Conv2d(
-                in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1
-            ),
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.1), # parameters
-        )
-        
-        self.side3 = nn.Sequential(
-            # image 48x48
-            nn.Conv2d(
-                in_channels=64, out_channels=128, kernel_size=1, stride=2
-            ),
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.1), # parameters
-            # image 24x24
-        )
-        
-        self.block4 = nn.Sequential(
-            # image 24x24
-            nn.Conv2d(
-                in_channels=128, out_channels=256, kernel_size=3, stride=2, padding=1
+                in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1
             ),
             nn.BatchNorm2d(256),
             nn.LeakyReLU(0.1), # parameters
-            # image 12x12            
+            # image 48x48
+            nn.Conv2d(
+                in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1
+            ),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(0.1), # parameters
+            # image 48x48
+        )
+        
+        self.info2 = nn.Sequential(
+            # 48x48
             nn.Conv2d(
                 in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1
             ),
@@ -105,74 +92,100 @@ class Net(nn.Module):
             nn.LeakyReLU(0.1), # parameters
         )
         
-        self.side4 = nn.Sequential(
-            # image 24x24
+        self.side3 = nn.Sequential(
+            # image 48x48
             nn.Conv2d(
-                in_channels=128, out_channels=256, kernel_size=1, stride=2
+                in_channels=256, out_channels=256, kernel_size=1, stride=1
             ),
             nn.BatchNorm2d(256),
             nn.LeakyReLU(0.1), # parameters
-            # image 12x12
+            # image 48x48
+        )
+        
+        self.block4 = nn.Sequential(
+            # image 48x48
+            nn.Conv2d(
+                in_channels=256, out_channels=512, kernel_size=4, stride=2, padding=1
+            ),
+            nn.BatchNorm2d(512),
+            nn.LeakyReLU(0.1), # parameters
+            # image 24x24            
+            nn.Conv2d(
+                in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1
+            ),
+            nn.BatchNorm2d(512),
+            nn.LeakyReLU(0.1), # parameters
+            # image 24x24 
+        )
+        
+        self.side4 = nn.Sequential(
+            # image 48x48
+            nn.Conv2d(
+                in_channels=256, out_channels=512, kernel_size=2, stride=2
+            ),
+            nn.BatchNorm2d(512),
+            nn.LeakyReLU(0.1), # parameters
+            # image 24x24
             # padding till here is all correct
         
         )
         
         self.block5 = nn.Sequential(
-            # image 12x12
+            # image 24x24
+            nn.ConvTranspose2d(
+                in_channels=512, out_channels=256, kernel_size=3, stride=2, padding=1, output_padding=1
+            ),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(0.1), # parameters
+            # image 48x48
+            nn.Conv2d(
+                in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1
+            ),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(0.1), # parameters  
+            # image 48x48
+        )
+        
+        self.side5 = nn.Sequential(
+            # image 24x24
+            nn.ConvTranspose2d(
+                in_channels=512, out_channels=256, kernel_size=2, stride=2
+            ),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(0.1), # parameters
+            # image 48x48
+        )
+        
+        self.block6 = nn.Sequential(
+            # image 48x48
             nn.ConvTranspose2d(
                 in_channels=256, out_channels=128, kernel_size=3, stride=2, padding=1, output_padding=1
             ),
             nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
-            # image 24x24
-            nn.ConvTranspose2d(
+            # image 96x96
+            nn.Conv2d(
                 in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1
             ),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.1), # parameters  
-            # image 24x24
-        )
-        
-        self.side5 = nn.Sequential(
-            # image 12x12
-            nn.ConvTranspose2d(
-                in_channels=256, out_channels=128, kernel_size=1, stride=2, output_padding=1
-            ),
-            nn.BatchNorm2d(128),
             nn.LeakyReLU(0.1), # parameters
-            # image 24x24
-        )
-        
-        self.block6 = nn.Sequential(
-            # image 24x24
-            nn.ConvTranspose2d(
-                in_channels=128, out_channels=64, kernel_size=3, stride=2, padding=1, output_padding=1
-            ),
-            nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.1), # parameters
-            # image 48x48
-            nn.ConvTranspose2d(
-                in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1
-            ),
-            nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.1), # parameters
-            # image 48x48
+            # image 96x96
         )
         
         self.side6 = nn.Sequential(
-            # image 24x24
-            nn.ConvTranspose2d(
-                in_channels=128, out_channels=64, kernel_size=1, stride=2, output_padding=1
-            ),
-            nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.1), # parameters
             # image 48x48
+            nn.ConvTranspose2d(
+                in_channels=256, out_channels=128, kernel_size=2, stride=2
+            ),
+            nn.BatchNorm2d(128),
+            nn.LeakyReLU(0.1), # parameters
+            # image 96x96
         )
         
         self.block7 = nn.Sequential(
-            # image 48x48
-            nn.ConvTranspose2d(
-                in_channels=64, out_channels=32, kernel_size=3, stride=2, padding=1, output_padding=1
+            # image 96x96
+            nn.Conv2d(
+                in_channels=128, out_channels=32, kernel_size=3, stride=1, padding=1
             ),
             nn.BatchNorm2d(32),
             nn.LeakyReLU(0.1), # parameters
@@ -211,8 +224,9 @@ class Net(nn.Module):
         out = out + residual1 # add residuak to output
         
         residual2 = out # 
-        out = self.block2(out) # 64 channels, 48x48 image
-        out = out + residual2
+        residual2 = self.side2(out)
+        out = self.block2(out) # 64 channels, 96x96 image
+        out = out + residual2 #
         
         residual3 = out
         residual3 = self.side3(residual3) # residual need to be conv in order to add
@@ -250,7 +264,7 @@ class Net(nn.Module):
 #         out = F.relu(out) # fully connect sigmoid, image 96x96      
         
 #         print(out.size())
-        out = out.view(-1, 1, 96, 96)
+#        out = out.view(-1, 1, 96, 96)
         return out
     
     

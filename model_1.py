@@ -16,23 +16,44 @@ class Net(nn.Module):
             nn.Conv2d(128, 128, (5, 5), (1, 1), (2, 2)),
             nn.LeakyReLU(0.1),
             nn.BatchNorm2d(128),
-            nn.Conv2d(128, 128, (5, 5), (1, 1), (2, 2)),
+            nn.Conv2d(128, 256, (3, 3), (1, 1), (1, 1)),
             nn.LeakyReLU(0.1),
-            nn.BatchNorm2d(128),
-            nn.Conv2d(128, 64, (5, 5), (2, 2), (2, 2)),
+            nn.BatchNorm2d(256),
+            nn.Conv2d(256, 256, (3, 3), (1, 1), (1, 1)),
             nn.LeakyReLU(0.1),
-            nn.BatchNorm2d(64),
-            nn.Conv2d(64, 4, (3, 3), (1, 1), (1, 1)),
+            nn.BatchNorm2d(256),
+            nn.Conv2d(256, 512, (3, 3), (1, 1), (1, 1)),
             nn.LeakyReLU(0.1),
-            nn.BatchNorm2d(4),
-            # image 48x48
+            nn.BatchNorm2d(512),
+            nn.Conv2d(512, 512, (3, 3), (1, 1), (1, 1)),
+            nn.LeakyReLU(0.1),
+            nn.BatchNorm2d(512),
+            nn.Conv2d(512, 512, (3, 3), (1, 1), (1, 1)),
+            nn.LeakyReLU(0.1),
+            nn.BatchNorm2d(512),
+            nn.Conv2d(512, 512, (3, 3), (1, 1), (1, 1)),
+            nn.LeakyReLU(0.1),
+            nn.BatchNorm2d(512),
+            nn.Conv2d(512, 2048, (3, 3), (1, 1), (1, 1)),
+            nn.LeakyReLU(0.1),
+            nn.BatchNorm2d(2048),
+            nn.Conv2d(2048, 2048, (7, 7), (1, 1), (3, 3)),
+            nn.LeakyReLU(0.1),
+            nn.BatchNorm2d(2048),
+            nn.Conv2d(2048, 2048, (1, 1), (1, 1)),
+            nn.LeakyReLU(0.1),
+            nn.BatchNorm2d(2048),
+            nn.Conv2d(2048, 1, (1, 1), (1, 1)),
+            nn.LeakyReLU(0.1),
+            nn.BatchNorm2d(1),
+            # image 96x96
         )
         
-        self.block1 = nn.Sequential(
-            # image 48x48
-            nn.PixelShuffle(2)
-            # image 96x96           
-        )
+#         self.block1 = nn.Sequential(
+#             # image 96x96
+#             nn.PixelShuffle(2)
+#             # image 192x192
+#         )
         
         
         self.fc = nn.Sequential(
@@ -44,7 +65,7 @@ class Net(nn.Module):
     def forward(self, x):
         x=x.float()
         out = self.block0(x) 
-        out = self.block1(out)
+        out = self.fc(out)
 
         return out
     
